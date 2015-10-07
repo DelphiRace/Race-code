@@ -10,7 +10,18 @@
 			include_once($systemApContent);
 			//print_r($systemApContent);
 		}
-	}
+    }else{
+        //先載入各物件
+        $systemApPath = glob( __DIR__ ."/*/*/*.php");
+        if(!empty($systemApPath)){
+            foreach($systemApPath as $systemApContent){
+                include_once($systemApContent);
+                //print_r($systemApContent);
+            }
+        }
+    }
+    
+    
 	//載入結束
 	//引用物件命名空間
 	use SystemDBService\clsDB_MySQL;
@@ -31,7 +42,7 @@
 		public $userInfo;
 		
 		//供呼叫程式初始化設定
-		public function initialization(){
+		public function initialization($DBSection){
 			@session_start();
 			
 			//相關工具設定
@@ -48,12 +59,19 @@
 
 			//取得資料庫設定值
 			$strIniFile = __DIR__ . '\\..\\connDB.ini';
+            if(!file_exists($strIniFile)){
+                $strIniFile = __DIR__ . '/../connDB.ini';
+            }
 			$sSection = 'connDB';
+            if(!$DBSection){
+                $DBSection = 'defaultDB';
+            }
 			
 			$sServer = $VTs->GetINIInfo($strIniFile,$sSection,'servername','');
 			$sUser = $VTs->GetINIInfo($strIniFile,$sSection,'user','');
 			$sPassWord = $VTs->GetINIInfo($strIniFile,$sSection,'password','');
-			$sDatabase = $VTs->GetINIInfo($strIniFile,$sSection,'defaultDB','');
+            //取得資料庫
+			$sDatabase = $VTs->GetINIInfo($strIniFile,$DBSection,'defaultDB','');
 			
 			//放到共同變數中
 			$iniSet["DBSet"]["sServer"] = $sServer;

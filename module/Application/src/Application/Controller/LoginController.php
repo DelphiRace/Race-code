@@ -16,7 +16,7 @@ class LoginController extends AbstractActionController
     {
 		$VTs = new clsSystem;
 		//先初始化
-		$VTs->initialization();
+		$VTs->initialization('oauth');
 		
 		//-----------BI開始------------
 		

@@ -59,7 +59,7 @@
 		}
 		
 		//資料庫轉換資料
-		private function Data2Array($DBQueryData){
+		private function Data2Array($DBQueryData, $kind=0){
 			$data = null;
 			if($DBQueryData){
 				$i=0;

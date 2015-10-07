@@ -16,7 +16,7 @@ class IndexController extends AbstractActionController
     {
 		$VTs = new clsSystem;
 		//先初始化
-		$VTs->initialization();
+		$VTs->initialization('oauth');
 		
 		//-----------BI開始------------
 		//執行查詢
