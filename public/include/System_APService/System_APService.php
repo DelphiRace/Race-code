@@ -222,7 +222,7 @@
 		
 		//json轉換成資料轉(decode)
 		public function Json2Data($JsonData){
-			return $this->SystemToolsService->Data2Json($JsonData);
+			return $this->SystemToolsService->Json2Data($JsonData);
 		}
 	#modDataFormate結束
 		
@@ -239,6 +239,20 @@
 			$this->SystemToolsService->debug($DataArray);
 		}
 	#modArrayDebug結束
+	
+	#modCurl相關
+		//POST
+		public function UrlDataPost($url, $SendArray) {
+			//回傳結果是對象URL執行結果
+			return $this->SystemToolsService->UrlDataPost($url, $SendArray);
+		}
+		//GET
+		public function UrlDataGet($url) {
+			//回傳結果是對象URL執行結果
+			return $this->SystemToolsService->UrlDataGet($url);
+		}
+	#modCurl結束
+	
 	#這裡是	SystemToolsService 結束
 	
 	#創建Login code & Token
@@ -247,7 +261,7 @@
 			//回傳結果是一個陣列
 			return $this->SystemTokenService->CreatLoginCodeAndToken($userID);
 		}
-	#創建Login code & Token 結束	
+	#創建Login code & Token 結束
 	}
 	
 	

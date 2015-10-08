@@ -216,5 +216,35 @@
 			echo "</pre>";
 		}
 	#modArrayDebug結束
+	#modCurl取得網址相關內容
+		public function UrlDataPost($url, $SendArray) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL,$url);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	//quick fix for SSL
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $SendArray);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
+															
+			$response = curl_exec($ch);
+			curl_close ($ch);
+			
+			return $response;
+		}
+		
+		public function UrlDataGet($url) {
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_URL, $url );
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
+															
+			$result = curl_exec($ch);
+			curl_close ($ch);
+
+			return $result;
+		}
+	#modCurl結束
 	}
 ?>

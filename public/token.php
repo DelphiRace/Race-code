@@ -8,8 +8,8 @@
 	//先初始化
 	$VTs->initialization('oauth');
 	
-	$strSQL = "select b.uid,b.userName,b.userMail,login_date from token a ";
-	$strSQL .= "left join account b on a.uid = b.uid ";
+	$strSQL = "select b.uuid,b.userName,b.userMail,login_date from token a ";
+	$strSQL .= "left join account b on a.uuid = b.uuid ";
 	$strSQL .= " where a.access_token = '".$_POST["access_token"]."'";
 	$data = $VTs->QueryData($strSQL);
 
