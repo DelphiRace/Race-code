@@ -83,4 +83,35 @@ class LoginController extends AbstractActionController
 		
 		return new ViewModel($this->viewContnet);
     }
+    
+    public function googlesigninAction()
+    {
+        $VTs = new clsSystem;
+        //先初始化
+        $VTs->initialization('oauth');
+        
+        //-----------BI開始------------
+        //接收已於Google驗證好的資料
+        //$VTs->debug($_POST);
+//        //執行查詢
+//        $strSQL = "select * from account";
+//        $data = $VTs->QueryData($strSQL);
+//        
+//        //debug，印出資料用
+//        $VTs->debug($data);
+//        //日期轉換
+//        $date = date("Y-m-d");
+//        $changeDate = $VTs->DateTime("ADyyyyMMdd_RCyyyMMdd",$date);
+//        $this->viewContnet['pageContent'] = $changeDate;
+        $this->viewContnet['pageContent'] = $VTs->Data2Json($_POST);
+        //-----------BI結束------------
+        
+        //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs=null;
+        
+        return new ViewModel($this->viewContnet);
+    }
+    
 }

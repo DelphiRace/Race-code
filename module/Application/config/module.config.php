@@ -64,6 +64,22 @@ return array(
 					),
 				),
 			),
+                          
+            'GoogleOAuthSignin' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/GoogleOAuthSignin',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Login',
+                        'action'     => 'googlesignin',
+                    ),
+                ),
+            ),
+            
         ),
     ),
     'service_manager' => array(

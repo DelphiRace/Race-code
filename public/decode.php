@@ -6,7 +6,7 @@
 	
 	$VTs = new clsSystem;
 	//先初始化
-	$VTs->initialization();
+	$VTs->initialization('oauth');
 	
 	$strSQL = "select access_token from token where login_code = '".$_POST["login_code"]."'";
 	$data = $VTs->QueryData($strSQL);
