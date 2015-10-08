@@ -42,7 +42,7 @@
 		public $userInfo;
 		
 		//供呼叫程式初始化設定
-		public function initialization($DBSection){
+		public function initialization($DBSection = ''){
 			@session_start();
 			
 			//相關工具設定
