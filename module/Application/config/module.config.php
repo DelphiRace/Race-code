@@ -80,6 +80,21 @@ return array(
                 ),
             ),
             
+			'FacebookOAuthSignin' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/FacebookOAuthSignin',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Login',
+                        'action'     => 'facebooksignin',
+                    ),
+                ),
+            ),
+			
         ),
     ),
     'service_manager' => array(

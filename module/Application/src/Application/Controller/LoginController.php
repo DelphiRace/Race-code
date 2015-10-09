@@ -168,4 +168,94 @@ class LoginController extends AbstractActionController
         return new ViewModel($this->viewContnet);
     }
     
+	//Facebook Login
+	public function facebooksigninAction()
+    {
+        $VTs = new clsSystem;
+        //先初始化
+        $VTs->initialization('oauth');
+        
+        //-----------BI開始------------
+		//設定資訊陣列
+		$uidInfo = array();
+		$uidInfo["status"] = false;
+		
+        //接收已於Google驗證好的資料
+		if($_POST["authResponse"]["accessToken"]){
+			//1. 先與Google做AccessToken的認證
+			$url="https://graph.facebook.com/v2.5/me?access_token=".$_POST["authResponse"]["accessToken"];
+			$facebookLoginInfo = $VTs->Json2Data( $VTs->UrlDataGet($url) );
+			$facebookUserID = $facebookLoginInfo->id;
+			$facebookUserName = $facebookLoginInfo->name;
+			
+			//$VTs->debug($facebookLoginInfo);
+			//exit();
+			//1-1. 確認認證無誤
+			if($facebookUserID){
+				
+				//2. 執行查詢看資料庫是否已有新增過
+				//執行查詢
+				$strSQL = "select * from thirdparty_oauth where thirdparty_uid = '". $facebookUserID ."'";
+				$data = $VTs->QueryData($strSQL);
+				
+				//2-1. 沒有新增過，準備新增
+				if(empty($data)){
+					//執行新增
+					$strSQL = "insert into thirdparty_oauth(thirdparty_uid,userName,oauth_type, approveCode, approveStatus) values('".$facebookUserID."','".$facebookUserName."',1,'1234',0)";
+					$VTs->ExecuteNonQuery($strSQL);
+					
+					//2-2. 重新執行查詢，並取得UUID
+					$strSQL = "select * from thirdparty_oauth where thirdparty_uid='".$facebookUserID."'";
+					$data = $VTs->QueryData($strSQL);
+				}
+				
+				$uuid = $data[0]["uuid"];
+				//驗證USER是否已存在Token
+				$strSQL = "select uuid from token where uuid='".$uuid."'";
+				$TokenData = $VTs->QueryData($strSQL);
+				
+				//產生Token，會回傳Login_Code、Access_Token
+				$loginArr = $VTs->CreatLoginCodeAndToken($uuid);
+				//存到Token資料表中，以供後續Oauth使用
+				if($uuid){
+					if(empty($TokenData)){
+						$strSQL = "insert into token(uuid,login_code,access_token,login_from,login_type) values('".$uuid."','".$loginArr["Login_Code"]."','".$loginArr["Access_Token"]."','".$_SERVER["REMOTE_ADDR"]."',1)";
+					}else{
+						$strSQL = "update token set login_code='".$loginArr["Login_Code"]."',access_token='".$loginArr["Access_Token"]."',login_from='".$_SERVER["REMOTE_ADDR"]."',login_date='".date("Y-m-d H:i:s")."' where uuid='".$uuid."'";
+					}
+				}else{
+					echo "System error";
+					exit();
+				}
+				//確定存取Token到資料表中
+				$VTs->QueryData($strSQL);
+				
+				//紀錄SESSION
+				$_SESSION["uuid"] = $uuid;
+				$_SESSION["name"] = $data[0]["userName"];
+				$_SESSION["mail"] = $data[0]["userMail"];
+				$_SESSION["LoginCode"] = $loginArr["Login_Code"];
+				
+				$uidInfo["LoginCode"] = $loginArr["Login_Code"];
+				$uidInfo["status"] = true;
+				
+			}else{ //1-2. 未通過驗證
+				$uidInfo["error"] = 'The Accound is not Sing up!';
+				$uidInfo["code"] = '6';
+			}
+			
+		}else{
+			$uidInfo["error"] = 'You did not have Facebook access token!';
+			$uidInfo["code"] = '5';
+		}
+        $this->viewContnet['pageContent'] = $VTs->Data2Json($uidInfo);
+        //-----------BI結束------------
+        
+        //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs=null;
+        
+        return new ViewModel($this->viewContnet);
+    }
 }
