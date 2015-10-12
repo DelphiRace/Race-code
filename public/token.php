@@ -11,7 +11,6 @@
 	
 	$strSQL = "select * from token where access_token = '".$_POST["access_token"]."'";
 	$data = $VTs->QueryData($strSQL);
-	
 	//從別的系統登入
 	if($data[0]["login_type"] == 1){
 		$strSQL = "select a.uuid,a.userName,a.userMail,b.login_date from thirdparty_oauth a ";
@@ -22,6 +21,7 @@
 		$strSQL = "select b.uuid,b.userName,b.userMail,login_date from token a ";
 		$strSQL .= "left join account b on a.uuid = b.uuid ";
 		$strSQL .= " where a.uuid = '".$data[0]["uuid"]."'";
+        $data = $VTs->QueryData($strSQL);
 	}
 	//$basis->debug($data[0]);
 	echo $VTs->Data2Json($data[0]);
