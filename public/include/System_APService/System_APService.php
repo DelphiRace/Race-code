@@ -70,6 +70,7 @@
 			$sServer = $VTs->GetINIInfo($strIniFile,$sSection,'servername','');
 			$sUser = $VTs->GetINIInfo($strIniFile,$sSection,'user','');
 			$sPassWord = $VTs->GetINIInfo($strIniFile,$sSection,'password','');
+            
             //取得資料庫
 			$sDatabase = $VTs->GetINIInfo($strIniFile,$DBSection,'defaultDB','');
 			
@@ -160,7 +161,7 @@
 	#modIO
 		//讀取INI檔資料 GetINIInfo(strIniFile, sSection, sKeyName, sDefaultValue = "") As String
 		public function GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue = "",$originDataArray = false){
-			$this->SystemToolsService->GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue,$originDataArray);
+			return $this->SystemToolsService->GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue,$originDataArray);
 		}
 		
 		//使用cmd執行指令
