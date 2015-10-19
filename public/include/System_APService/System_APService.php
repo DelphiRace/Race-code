@@ -155,6 +155,11 @@
 		public function DBClose(){
 			$this->SystemDBService->DBClose();
 		}
+        
+        //取得AI新增的ＩＤ
+        public function NewInsertID(){
+            return $this->SystemDBService->NewInsertID();
+        }
 	#這裡是SystemDBService 結束
 		
 	#這裡是	SystemToolsService

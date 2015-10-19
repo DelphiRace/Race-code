@@ -57,6 +57,11 @@
 		public function DBClose(){
 			$this->conn->close();
 		}
+        
+        //取得AI新增的ＩＤ
+        public function NewInsertID(){
+           return $this->conn->insert_id;
+        }
 		
 		//資料庫轉換資料
 		private function Data2Array($DBQueryData, $kind=0){
