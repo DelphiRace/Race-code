@@ -16,7 +16,8 @@ class LoginController extends AbstractActionController
     {
 		$VTs = new clsSystem;
 		//先初始化
-		$VTs->initialization('oauth');
+		//$VTs->initialization('oauth');
+        $VTs->initialization();
 		
 		//-----------BI開始------------
 		
@@ -33,7 +34,7 @@ class LoginController extends AbstractActionController
 			//1.檢驗帳號與密碼(若錯誤回傳錯誤)
 			
 			
-			$strSQL = "select * from account where userAc = '".$userAc."' and userPw = md5('".$userPw."')";
+			$strSQL = "select * from acl_user where userAc = '".$userAc."' and userPw = md5('".$userPw."')";
 			$data = $VTs->QueryData($strSQL);
 			
 			//2.通過檢驗後，回傳登入Code與狀態
@@ -41,7 +42,8 @@ class LoginController extends AbstractActionController
 				
 				$uuid = $data[0]["uuid"];
 				//驗證USER是否已存在Token
-				$strSQL = "select uuid from token where uuid='".$uuid."'";
+                //以下是SSO Token專用，目前暫時用不到
+				/*$strSQL = "select uuid from token where uuid='".$uuid."'";
 				$TokenData = $VTs->QueryData($strSQL);
 							
 				//產生Token，會回傳Login_Code、Access_Token
@@ -53,16 +55,19 @@ class LoginController extends AbstractActionController
 					$strSQL = "update token set login_code='".$loginArr["Login_Code"]."',access_token='".$loginArr["Access_Token"]."',login_from='".$_SERVER["REMOTE_ADDR"]."',login_date='".date("Y-m-d H:i:s")."' where uuid='".$uuid."'";
 				}
 				//確定存取Token到資料表中
-				$VTs->QueryData($strSQL);
+				$VTs->QueryData($strSQL);*/
 				
 				//紀錄SESSION
-				$_SESSION["uuid"] = $uuid;
-				$_SESSION["name"] = $data[0]["userName"];
-				$_SESSION["mail"] = $data[0]["userMail"];
-				$_SESSION["LoginCode"] = $loginArr["Login_Code"];
+				//$_SESSION["uuid"] = $uuid;
+				//$_SESSION["name"] = $data[0]["userName"];
+				//$_SESSION["mail"] = $data[0]["userMail"];
+				//$_SESSION["LoginCode"] = $loginArr["Login_Code"];
 				
-				$uidInfo["LoginCode"] = $loginArr["Login_Code"];
-				$uidInfo["status"] = true;
+				//$uidInfo["LoginCode"] = $loginArr["Login_Code"];
+				$uidInfo["uuid"] = $uuid;
+                $uidInfo["userAc"] = $userAc;
+                $uidInfo["name"] = $data[0]["userName"];
+                $uidInfo["status"] = true;
 			}else{ //2-1. 未通過驗證
 				$uidInfo["error"] = 'The Accound is not Sing up!';
 				$uidInfo["code"] = '2';
